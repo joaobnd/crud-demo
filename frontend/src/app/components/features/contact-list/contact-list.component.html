@@ -1,28 +1,35 @@
-<div class="dashboard-container">
+<div class="contact-list-container">
   <button
-    class="dashboard-container-add"
+    class="contact-list-container-add"
     mat-stroked-button
     color="primary"
     type="button"
-    routerLink="/student/add"
   >
     Cadastrar novo contato
   </button>
-  <div class="dashboard-container-list">
-    <mat-card
-      class="dashboard-container-list-item"
-      *ngFor="let contact of contactList"
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let contact">
+          {{ contact.firstName + " " + contact.lastName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Telefone</th>
+        <td mat-cell *matCellDef="let contact">{{ contact.phone }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSize]="1"
+      [pageSizeOptions]="[1, 2, 3]"
+      showFirstLastButtons
     >
-      <mat-card-header class="dashboard-container-list-item-header">
-        <mat-card-title-group
-          class="dashboard-container-list-item-header-group"
-        >
-          <mat-card-title>
-            {{ contact.firstName }} {{ contact.lastName }}</mat-card-title
-          >
-          <mat-card-subtitle>{{ contact.phone }}</mat-card-subtitle>
-        </mat-card-title-group>
-      </mat-card-header>
-    </mat-card>
+    </mat-paginator>
   </div>
 </div>

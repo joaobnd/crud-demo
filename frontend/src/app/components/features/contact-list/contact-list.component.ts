@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,9 +9,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Contact } from '../../../models/contact';
 import { CommonModule } from '@angular/common';
+
 
 const matModules = [
   MatCardModule,
@@ -24,6 +28,10 @@ const matModules = [
   MatExpansionModule,
   MatTableModule,
   MatListModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSlideToggleModule,
+  MatSelectModule
 ];
 
 @Component({
@@ -36,16 +44,25 @@ const matModules = [
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.scss'
 })
-export class ContactListComponent {
+export class ContactListComponent implements AfterViewInit {
+  displayedColumns: string[] = ['name', 'phone'];
+  dataSource = new MatTableDataSource<Contact>([
+    contactMock,
+    contactMock
+  ]);
 
-  contactMock: Contact = {
-    firstName: 'João',
-    lastName: 'Martins',
-    phone: '83 99650-3753'
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
-
-  contactList: Contact[] = [
-    this.contactMock,
-    this.contactMock
-  ];
 }
+
+const contactMock: Contact = {
+  firstName: 'João',
+  lastName: 'Martins',
+  phone: '83 99650-3753'
+}
+
+
+
