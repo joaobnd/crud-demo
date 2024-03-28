@@ -9,6 +9,11 @@
   </button>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let index = index">{{ index + 1 }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Nome</th>
         <td mat-cell *matCellDef="let contact">
@@ -19,6 +24,35 @@
       <ng-container matColumnDef="phone">
         <th mat-header-cell *matHeaderCellDef>Telefone</th>
         <td mat-cell *matCellDef="let contact">{{ contact.phone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Endereço</th>
+        <td mat-cell *matCellDef="let contact">
+          {{
+            contact.address.street +
+              " - " +
+              contact.address.number +
+              ", " +
+              contact.address.neighborhood +
+              ", " +
+              contact.address.city +
+              "-" +
+              contact.address.state
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let index = index" class="action-cell">
+          <button mat-icon-button color="primary" (click)="editContact(index)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteContact(index)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

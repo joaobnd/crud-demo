@@ -45,7 +45,8 @@ const matModules = [
   styleUrl: './contact-list.component.scss'
 })
 export class ContactListComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name', 'phone'];
+
+  displayedColumns: string[] = ['position', 'name', 'phone', 'address', 'actions'];
   dataSource = new MatTableDataSource<Contact>([
     contactMock,
     contactMock
@@ -56,12 +57,28 @@ export class ContactListComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  editContact(_t48: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteContact(index: number) {
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription();
+  }
 }
 
 const contactMock: Contact = {
   firstName: 'João',
   lastName: 'Martins',
-  phone: '83 99650-3753'
+  phone: '83 99650-3753',
+  address: {
+    number: 175,
+    street: 'Av Rodrigues Alves',
+    neighborhood: 'Universitário',
+    city: 'Campina Grande',
+    state: 'PB'
+  }
 }
 
 
