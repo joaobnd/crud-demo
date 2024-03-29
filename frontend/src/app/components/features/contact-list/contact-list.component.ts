@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,7 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Contact } from '../../../models/contact';
 import { CommonModule } from '@angular/common';
-
+import { AddContactComponent } from '../add-contact/add-contact.component';
 
 const matModules = [
   MatCardModule,
@@ -39,12 +40,17 @@ const matModules = [
   standalone: true,
   imports: [
     ...matModules,
-    CommonModule
+    CommonModule,
+    AddContactComponent
   ],
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.scss'
 })
 export class ContactListComponent implements AfterViewInit {
+
+  constructor() { }
+
+  showModal: boolean = false;
 
   displayedColumns: string[] = ['position', 'name', 'phone', 'address', 'actions'];
   dataSource = new MatTableDataSource<Contact>([
@@ -58,13 +64,16 @@ export class ContactListComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  editContact(_t48: any) {
-    throw new Error('Method not implemented.');
+  editContact(contact: Contact) {
   }
 
   deleteContact(index: number) {
     this.dataSource.data.splice(index, 1);
     this.dataSource._updateChangeSubscription();
+  }
+
+  openModalNewContact() {
+    this.showModal = !this.showModal;
   }
 }
 

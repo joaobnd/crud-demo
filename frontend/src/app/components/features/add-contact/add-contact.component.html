@@ -1,0 +1,59 @@
+<mat-card (keydown)="handleEsc($event)">
+  <mat-card-header>
+    <mat-card-title>Cadastrar Novo Contato</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="input-group">
+      <form [formGroup]="newContactForm">
+        <div class="input-row">
+          <mat-form-field>
+            <input matInput placeholder="Nome" formControlName="firstName" />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Sobrenome"
+              formControlName="lastName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Telefone" formControlName="phone" />
+          </mat-form-field>
+        </div>
+
+        <div class="input-row">
+          <mat-form-field>
+            <input matInput placeholder="Rua" formControlName="street" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Número" formControlName="number" />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Bairro"
+              formControlName="neighborhood"
+            />
+          </mat-form-field>
+        </div>
+        <div class="input-row">
+          <mat-form-field>
+            <input matInput placeholder="Cidade" formControlName="city" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Estado" formControlName="state" />
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="buttons-container">
+    <button mat-raised-button color="primary" (click)="close()">
+      Cancelar
+    </button>
+    <button mat-stroked-button color="primary" (click)="saveContact()">
+      Salvar
+    </button>
+  </mat-card-actions>
+</mat-card>
