@@ -1,4 +1,4 @@
-import { Component, Inject, Optional, Output } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional, Output } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,8 @@ import { Contact } from '../../../models/contact';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { EventEmitter, HostListener } from '@angular/core';
+import { DataService } from '../../../shared/data.service';
+import { ActivatedRoute } from '@angular/router';
 
 const matModules = [
   MatCardModule,
@@ -37,27 +39,80 @@ const matModules = [
   templateUrl: './add-contact.component.html',
   styleUrl: './add-contact.component.scss'
 })
-export class AddContactComponent {
+export class AddContactComponent implements OnInit {
 
-  @Output() savedContact = new EventEmitter<any>();
+  isEditMode = false;
+  @Input() contactToEdit: Contact | null = null;
+
+  @Output() contactCreated = new EventEmitter<any>();
   @Output() closeModal = new EventEmitter<void>();
 
-  close() {
-    this.closeModal.emit();
-  }
-  saveContact() {
-    throw new Error('Method not implemented.');
+  constructor(private dataService: DataService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    if (this.contactToEdit) { this.isEditMode = true };
+    this.populateForm()
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  handleEsc(event: KeyboardEvent) {
-    this.close();
+  reset(): void {
+    this.newContactForm.reset();
+    this.isEditMode = false;
+    this.contactToEdit = null;
+  }
+
+  close() {
+    this.reset();
+    this.closeModal.emit();
+  };
+
+  populateForm(): void {
+    if (this.contactToEdit) {
+      this.newContactForm.patchValue({
+        name: this.contactToEdit.name,
+        phone: this.contactToEdit.phone,
+        street: this.contactToEdit.street,
+        number: this.contactToEdit.number,
+        neighborhood: this.contactToEdit.neighborhood,
+        city: this.contactToEdit.city,
+        state: this.contactToEdit.state
+      });
+    }
+  }
+
+  saveContact() {
+
+    if (this.newContactForm.valid) {
+      const formData = this.newContactForm.value;
+
+      if (this.isEditMode) {
+        this.dataService.editContact(formData, this.contactToEdit?.id).subscribe({
+          next: () => {
+            this.reset();
+            this.contactCreated.emit();
+            this.close();
+          },
+          error: (error: any) => {
+            console.error('Error creating contact:', error);
+          }
+        });
+      } else {
+        this.dataService.createContact(formData).subscribe({
+          next: () => {
+            this.reset();
+            this.contactCreated.emit();
+            this.close();
+          },
+          error: (error: any) => {
+            console.error('Error creating contact:', error);
+          }
+        });
+      }
+    }
   }
 
   newContactForm = new FormGroup({
-    firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    phone: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(/^\(\d{2}\) 9 \d{4}-\d{4}$/)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    phone: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern(/^\d{2} \d \d{4}-\d{4}$/)]),
     street: new FormControl('', [Validators.required]),
     number: new FormControl('', [Validators.required]),
     neighborhood: new FormControl('', [Validators.required]),

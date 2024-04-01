@@ -1,5 +1,4 @@
-export interface Contact {
-  id: number;
+interface ContactDTO {
   name: string;
   phone: string;
   number: string;
@@ -8,3 +7,5 @@ export interface Contact {
   city: string;
   state: string;
 }
+
+export { ContactDTO };

@@ -1,6 +1,11 @@
-<mat-card (keydown)="handleEsc($event)">
+<mat-card>
   <mat-card-header>
-    <mat-card-title>Cadastrar Novo Contato</mat-card-title>
+    <mat-card-title>
+      <ng-container *ngIf="isEditMode; else createTitle">
+        Editar contato
+      </ng-container>
+      <ng-template #createTitle> Cadastrar novo contato </ng-template>
+    </mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -8,13 +13,10 @@
       <form [formGroup]="newContactForm">
         <div class="input-row">
           <mat-form-field>
-            <input matInput placeholder="Nome" formControlName="firstName" />
-          </mat-form-field>
-          <mat-form-field>
             <input
               matInput
-              placeholder="Sobrenome"
-              formControlName="lastName"
+              placeholder="Nome completo"
+              formControlName="name"
             />
           </mat-form-field>
           <mat-form-field>
@@ -29,6 +31,8 @@
           <mat-form-field>
             <input matInput placeholder="Número" formControlName="number" />
           </mat-form-field>
+        </div>
+        <div class="input-row">
           <mat-form-field>
             <input
               matInput
@@ -36,8 +40,6 @@
               formControlName="neighborhood"
             />
           </mat-form-field>
-        </div>
-        <div class="input-row">
           <mat-form-field>
             <input matInput placeholder="Cidade" formControlName="city" />
           </mat-form-field>
